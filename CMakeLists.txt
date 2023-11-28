@@ -29,6 +29,8 @@ set(APP_NAME Arkanoid)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_CXX_STANDARD 17)
+
 project(${APP_NAME})
 
 if(XCODE)
@@ -62,6 +64,7 @@ list(APPEND GAME_SOURCE
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
+     Classes/include/ArkanoidCore.h
      )
 
 if(ANDROID)
