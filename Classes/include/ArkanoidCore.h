@@ -23,6 +23,7 @@ namespace Arkanoid
 	class Ref {
   public:
     Ref() : sharedPtr(nullptr) { };
+    Ref(const std::shared_ptr<T>& sptr) : sharedPtr(sptr) { };
     Ref(std::shared_ptr<T>&& sptr) : sharedPtr(std::move(sptr)) { };
   public:
     template<typename... Args>
@@ -53,12 +54,13 @@ namespace Arkanoid
 	class Scope {
   public:
     Scope() : uniquePtr(nullptr) {};
-    Scope(std::unique_ptr<T>& ptr) : uniquePtr(ptr) {};
+    Scope(const std::unique_ptr<T>& ptr) : uniquePtr(ptr) {};
+    Scope(std::unique_ptr<T>&& ptr) : uniquePtr(std::move(ptr)) {};
   public:
     template<typename... Args>
     static Scope<T> create(Args&&... args) {
       Scope<T> ref;
-      ref = new T(std::forward(args)...);
+      ref.uniquePtr = std::unique_ptr<T>(new T(std::forward(args)...));
       return ref;
     }
     void swap(std::unique_ptr<T>&& ptr) { uniquePtr.swap(std::forward(ptr)); }
