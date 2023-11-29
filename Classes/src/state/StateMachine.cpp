@@ -29,3 +29,9 @@ Arkanoid::State::StateMachine::changeState(Ref<IState> state) {
   currentState = m_stateMap[state->getName()];
   currentState.lock()->onEnter();
 };
+
+void
+Arkanoid::State::StateMachine::addFirstState(Ref<IState> state) {
+  addState(state);
+  currentState = state;
+}

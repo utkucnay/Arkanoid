@@ -1,18 +1,22 @@
 #ifndef __STATE_H__
 #define __STATE_H__
 
+#include "state/StateMachine.h"
 #include "cocos2d.h"
 #include "ArkanoidCore.h"
 
-#define CREATE_STATE(_TYPE_) = static int kHashName = std::hash<std::string>{}(#_TYPE_)
-
 namespace Arkanoid::State {
+  class StateMachine;
+
   class IState {
   public:
+    IState(Ref<StateMachine> stateMachine) { _stateMachine = stateMachine; }
     inline virtual std::string getName() const  = 0;
     virtual void onEnter()                      = 0;
     virtual void update()                       = 0;
     virtual void onExit()                       = 0;
+  protected:
+    WeakRef<StateMachine> _stateMachine;
   };
 }
 
