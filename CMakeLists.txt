@@ -61,10 +61,13 @@ endif()
 # add cross-platforms source files and header files
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
+     Classes/src/state/StateMachine.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/include/ArkanoidCore.h
+     Classes/include/state/State.h
+     Classes/include/state/StateMachine.h
      )
 
 if(ANDROID)
