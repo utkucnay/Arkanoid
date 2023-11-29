@@ -1,17 +1,22 @@
 #ifndef __STATE_MACHINE_H__
 #define __STATE_MACHINE_H__
 
+#include "state/State.h"
 #include "cocos2d.h"
 #include "ArkanoidCore.h"
-#include "state/State.h"
+
 
 namespace Arkanoid::State{
+  class IState;
+
   class StateMachine {
   public:
     StateMachine();
     ~StateMachine();
 
   public:
+    void addFirstState(Ref<IState> state);
+
     void addState(Ref<IState> state);
 
     void removeState(Ref<IState> state);
@@ -27,7 +32,7 @@ namespace Arkanoid::State{
       return currentState;
     };
 
-  private:
+  protected:
     std::unordered_map<std::string, Ref<IState>> m_stateMap;
     WeakRef<IState> currentState;
   };
