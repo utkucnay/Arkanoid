@@ -1,37 +1,33 @@
 #include "state/StateMachine.h"
 
-Arkanoid::State::StateMachine::StateMachine() {
+Arkanoid::StateMachine::StateMachine() {
 
 }
 
-Arkanoid::State::StateMachine::~StateMachine() {
+Arkanoid::StateMachine::~StateMachine() {
 
 }
 
 void
-Arkanoid::State::StateMachine::addState(Ref<IState> state) {
-  assert(nullptr != state.get());
+Arkanoid::StateMachine::addState(std::shared_ptr<IState> state) {
   m_stateMap[state->getName()] = state;
 };
 
 
 void
-Arkanoid::State::StateMachine::removeState(Ref<IState> state) {
-  assert(nullptr != state.get());
+Arkanoid::StateMachine::removeState(std::shared_ptr<IState> state) {
   m_stateMap.erase(state->getName());
 };
 
 void
-Arkanoid::State::StateMachine::changeState(Ref<IState> state) {
-  assert(nullptr != state.get());
-  assert(nullptr != currentState.lock().get());
+Arkanoid::StateMachine::changeState(std::shared_ptr<IState> state) {
   currentState.lock()->onEnter();
   currentState = m_stateMap[state->getName()];
   currentState.lock()->onEnter();
 };
 
 void
-Arkanoid::State::StateMachine::addFirstState(Ref<IState> state) {
+Arkanoid::StateMachine::addFirstState(std::shared_ptr<IState> state) {
   addState(state);
   currentState = state;
 }

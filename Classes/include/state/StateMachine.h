@@ -3,10 +3,10 @@
 
 #include "state/State.h"
 #include "cocos2d.h"
-#include "ArkanoidCore.h"
+#include <memory>
 
 
-namespace Arkanoid::State{
+namespace Arkanoid{
   class IState;
 
   class StateMachine {
@@ -15,26 +15,25 @@ namespace Arkanoid::State{
     ~StateMachine();
 
   public:
-    void addFirstState(Ref<IState> state);
+    void addFirstState(std::shared_ptr<IState> state);
 
-    void addState(Ref<IState> state);
+    void addState(std::shared_ptr<IState> state);
 
-    void removeState(Ref<IState> state);
+    void removeState(std::shared_ptr<IState> state);
 
-    void changeState(Ref<IState> state);
+    void changeState(std::shared_ptr<IState> state);
 
     inline void update() {
-      getCurrentState().lock()->update();
+      currentState.lock()->update();
     }
 
-    inline WeakRef<IState> getCurrentState() const {
-      assert(nullptr != currentState.lock().get());
+    inline std::weak_ptr<IState> getCurrentState() const {
       return currentState;
     };
 
   protected:
-    std::unordered_map<std::string, Ref<IState>> m_stateMap;
-    WeakRef<IState> currentState;
+    std::unordered_map<std::string, std::shared_ptr<IState>> m_stateMap;
+    std::weak_ptr<IState> currentState;
   };
 }
 
