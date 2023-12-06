@@ -62,10 +62,12 @@ endif()
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/src/state/StateMachine.cpp
+     Classes/src/scene/ActionScene.cpp
+     Classes/src/scene/TitleScene.cpp
+     Classes/src/scene/Scene.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/include/ArkanoidCore.h
      Classes/include/state/State.h
      Classes/include/state/StateMachine.h
      )
