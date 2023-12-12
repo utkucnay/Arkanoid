@@ -23,6 +23,9 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
+#include "GameInstall.h"
+#include "scene/ActionScene.h"
+#include "scene/TitleScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 
@@ -78,7 +81,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
   director->setContentScaleFactor(1);
   director->getOpenGLView()->setDesignResolutionSize(
-  designSize.width, designSize.height, ResolutionPolicy::EXACT_FIT);
+  designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 
   director->setDisplayStats(true);
 
@@ -87,6 +90,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
   director->setAnimationInterval(1.0f / 60);
 
   register_all_packages();
+
+  GameInstall gameInstall;
 
   return true;
 }

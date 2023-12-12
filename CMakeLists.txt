@@ -27,11 +27,11 @@ cmake_minimum_required(VERSION 3.6)
 
 set(APP_NAME Arkanoid)
 
+project(${APP_NAME})
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 17)
-
-project(${APP_NAME})
 
 if(XCODE)
     if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
@@ -61,10 +61,20 @@ endif()
 # add cross-platforms source files and header files
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
+
      Classes/src/state/StateMachine.cpp
+
      Classes/src/scene/ActionScene.cpp
      Classes/src/scene/TitleScene.cpp
      Classes/src/scene/Scene.cpp
+
+     Classes/src/actor/Vaus.cpp
+     Classes/src/actor/EnergyBall.cpp
+
+     Classes/src/component/MouseInputHandleComponent.cpp
+     Classes/src/component/MobileInputHandleComponent.cpp
+     Classes/src/component/MoveComponent.cpp
+     Classes/src/component/TargetMoveComponent.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
