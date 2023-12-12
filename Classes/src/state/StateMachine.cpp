@@ -21,7 +21,7 @@ Arkanoid::StateMachine::removeState(std::shared_ptr<IState> state) {
 
 void
 Arkanoid::StateMachine::changeState(std::shared_ptr<IState> state) {
-  currentState.lock()->onEnter();
+  currentState.lock()->onExit();
   currentState = m_stateMap[state->getName()];
   currentState.lock()->onEnter();
 };

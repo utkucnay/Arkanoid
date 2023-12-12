@@ -1,7 +1,6 @@
 #ifndef __BLOCK_RESOURCE_H__
 #define __BLOCK_RESOURCE_H__
 
-#include "2d/CCAnimation.h"
 #include "cocos2d.h"
 #include "resource/ResourceHelper.h"
 
