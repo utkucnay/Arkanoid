@@ -6,13 +6,22 @@
 struct NodeConfig {
   cocos2d::Vec2 pos;
   cocos2d::Vec2 anchorPoint;
+  int           tag;
   float         positionZ;
 };
 
-struct LabelConfig : NodeConfig {
+struct LabelConfig {
   std::string text;
   std::string fontFile;
   float size;
+
+  NodeConfig nodeConfig;
+};
+
+struct PhysicConfig {
+  cocos2d::Size sizeBox;
+  bool isDynamic;
+  int bitmask;
 };
 
 #endif
