@@ -2,7 +2,7 @@
 #define __RESORCE_HELPER_H__
 
 #include "cocos2d.h"
-#include "cocos2dx-extansion/PixelSprite.h"
+#include "cocos2dx-extension/PixelSprite.h"
 
 namespace Arkanoid::Resource {
   static cocos2d::Animation*
@@ -11,7 +11,7 @@ namespace Arkanoid::Resource {
       const std::string& format,
       int bIndex, int eIndex)
   {
-    auto spriteFrameInstance = cocos2d::SpriteFrameCache::getInstance();
+    static auto spriteFrameInstance = cocos2d::SpriteFrameCache::getInstance();
 
     if(!spriteFrameInstance->isSpriteFramesWithFileLoaded(plist)) {
       spriteFrameInstance->addSpriteFramesWithFile(plist);

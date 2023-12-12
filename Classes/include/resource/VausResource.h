@@ -2,7 +2,7 @@
 #define __VAUS_RESOURCE_H__
 
 #include "cocos2d.h"
-#include "cocos2dx-extansion/PixelSprite.h"
+#include "cocos2dx-extension/PixelSprite.h"
 #include "resource/ResourceHelper.h"
 
 namespace Arkanoid::Resource {
