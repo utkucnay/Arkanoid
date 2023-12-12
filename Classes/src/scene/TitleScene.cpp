@@ -1,10 +1,12 @@
 #include "scene/TitleScene.h"
 #include "component/InputHandleComponent.h"
+#include "diContainer/DIContainer.h"
 #include "resource/Resource.h"
 #include "scene/ActionScene.h"
 #include "component/MouseInputHandleComponent.h"
 #include "component/MobileInputHandleComponent.h"
 #include "config/sceneConfig/TitleSceneConfig.h"
+#include <iostream>
 
 bool
 Arkanoid::TitleScene::init() {
@@ -24,18 +26,26 @@ Arkanoid::TitleScene::init() {
   auto infoText = cocos2d::Label::create();
   setLabelConfig(infoText, config->infoLabel);
 
+  DI::DIContainer diContainer;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-  _inputHandleComponent = std::make_shared<Components::MouseInputHandleComponent>(this);
+  diContainer.addFactory<Components::InputHandleComponent, Components::MouseInputHandleComponent>();
 #else
-  _inputHandleComponent = std::make_shared<Components::MobileInputHandleComponent>(this);
+  diContainer.addFactory<Components::InputHandleComponent, Components::MobileInputHandleComponent>();
 #endif
-
+  _inputHandleComponent = diContainer.getFactory<Components::InputHandleComponent>();
+  _inputHandleComponent->setOwner(*this);
   _inputHandleComponent->onBegan = CC_CALLBACK_1(Arkanoid::TitleScene::onTap, this);
   this->addChild(titleSprite);
   this->addChild(taitoSprite);
   this->addChild(infoText);
   return true;
 };
+
+void
+Arkanoid::TitleScene::onEnter() {
+  Scene::onEnter();
+  _inputHandleComponent->onEnter();
+}
 
 void
 Arkanoid::TitleScene::onTap(const Components::InputHandle& handle) {

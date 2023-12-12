@@ -11,7 +11,8 @@ namespace Arkanoid {
     static cocos2d::Scene* createScene();
     bool init() override;
     CREATE_FUNC(TitleScene);
-
+  public:
+    void onEnter() override;
   private:
     void onTap(const Components::InputHandle& handle);
 

@@ -30,9 +30,9 @@ static std::shared_ptr<TitleSceneConfig> getTitleSceneConfig() {
   titleSceneConfig->taito.anchorPoint = cocos2d::Vec2(0, 1);
   titleSceneConfig->taito.positionZ = UI;
 
-  titleSceneConfig->infoLabel.pos = cocos2d::Vec2(57, 204);
-  titleSceneConfig->infoLabel.anchorPoint = cocos2d::Vec2(0, 1);
-  titleSceneConfig->infoLabel.positionZ = UI;
+  titleSceneConfig->infoLabel.nodeConfig.pos = cocos2d::Vec2(57, 204);
+  titleSceneConfig->infoLabel.nodeConfig.anchorPoint = cocos2d::Vec2(0, 1);
+  titleSceneConfig->infoLabel.nodeConfig.positionZ = UI;
   titleSceneConfig->infoLabel.text = "Tap The Screen";
   titleSceneConfig->infoLabel.size = 10;
   titleSceneConfig->infoLabel.fontFile = Arkanoid::Resource::getTTFFontFileName();

@@ -20,5 +20,5 @@ Arkanoid::Scene::setLabelConfig(
       labelConfig.fontFile,
       labelConfig.size);
 
-  setNodeConfig(label, labelConfig);
+  setNodeConfig(label, labelConfig.nodeConfig);
 }
