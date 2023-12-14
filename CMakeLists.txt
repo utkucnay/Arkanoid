@@ -64,17 +64,22 @@ list(APPEND GAME_SOURCE
 
      Classes/src/state/StateMachine.cpp
 
+     Classes/src/manager/GameManager.cpp
+
      Classes/src/scene/ActionScene.cpp
      Classes/src/scene/TitleScene.cpp
      Classes/src/scene/Scene.cpp
 
      Classes/src/actor/Vaus.cpp
      Classes/src/actor/EnergyBall.cpp
+     Classes/src/actor/Column.cpp
 
      Classes/src/component/MouseInputHandleComponent.cpp
      Classes/src/component/MobileInputHandleComponent.cpp
      Classes/src/component/MoveComponent.cpp
      Classes/src/component/TargetMoveComponent.cpp
+     Classes/src/component/AnimationComponent.cpp
+     Classes/src/component/LimitedTargetMoveComponent.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
