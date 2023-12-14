@@ -1,11 +1,7 @@
 #include "actor/EnergyBall.h"
-#include "GameInstall.h"
-#include "component/MoveComponent.h"
-#include "manager/SceneManager.h"
-#include "manager/TagManager.h"
-#include "math/Vec2.h"
+#include "2d/CCActionInterval.h"
+#include "actor/IHit.h"
 #include "resource/Resource.h"
-#include "scene/TitleScene.h"
 
 bool
 Arkanoid::EnergyBall::init() {
@@ -14,7 +10,6 @@ Arkanoid::EnergyBall::init() {
     CC_CALLBACK_1(EnergyBall::onContactBegin, this);
   _eventDispatcher->addEventListenerWithSceneGraphPriority(
       contactListener, this);
-
 
   _sprite = Resource::createEnergyBall();
   this->addChild(_sprite);
@@ -27,18 +22,45 @@ void
 Arkanoid::EnergyBall::inject(
     const DI::DIContainer& diContainer)
 {
-  _moveComponent = diContainer.getFactory<Components::MoveComponent>();
-  _moveComponent->setOwner(*this);
-  _tagManager = gameDIContainer.getSingle<Manager::TagManager>();
-  _sceneManager = gameDIContainer.getSingle<Manager::SceneManager>();
+  if(diContainer.hasFactory<Components::MoveComponent>()) {
+    _moveComponent = diContainer.getFactory
+      <Components::MoveComponent>();
+
+    _moveComponent->setOwner(*this);
+  }
+  if(diContainer.hasFactory<Components::SpriteSqueeze>()){
+    _spriteSqueeze = diContainer.getFactory
+      <Components::SpriteSqueeze>();
+
+    _spriteSqueeze->setOwner(*this);
+  }
+  if(diContainer.hasSingle<Manager::TagManager>())
+    _tagManager = diContainer.getSingle<Manager::TagManager>();
+  if(diContainer.hasSingle<Manager::SceneManager>())
+    _gameManager = diContainer.getSingle<Manager::GameManager>();
+
 }
 
 void
 Arkanoid::EnergyBall::onEnter() {
   Node::onEnter();
+  _spriteSqueeze->setSqueeze(cocos2d::Vec2(1.25, .75));
   _moveComponent->onEnter();
   _moveComponent->setVelocity(cocos2d::Vec2(5, 10));
   _moveComponent->setSpeed(100);
+
+  auto fs = cocos2d::ScaleTo::create(.1f, 1.5, .5);
+  auto dl = cocos2d::DelayTime::create(.2f);
+  auto fs2 = cocos2d::ScaleTo::create(.1f, 1, 1);
+  auto dl2 = cocos2d::DelayTime::create(.2f);
+  auto fs3 = cocos2d::ScaleTo::create(.1f, .5, 1.5);
+  auto dl3 = cocos2d::DelayTime::create(.2f);
+  auto fs4 = cocos2d::ScaleTo::create(.1f, 1.25, .75);
+  auto dl4 = cocos2d::DelayTime::create(.2f);
+  auto fs5 = cocos2d::ScaleTo::create(.1f, 1, 1);
+  _hitAnimSeq = cocos2d::Sequence::create(fs, dl, fs2, dl2, fs3, dl3,
+        fs4, dl4, fs5, NULL);
+  _hitAnimSeq->setTag(10);
   setPositionZ(4);
 }
 
@@ -46,6 +68,11 @@ void
 Arkanoid::EnergyBall::update(float delta) {
   Node::update(delta);
   _moveComponent->update(delta);
+
+  if(this->getNumberOfRunningActionsByTag(10) == 0)
+    _spriteSqueeze->setScale(_moveComponent->getSpeed() / 400);
+
+  rotateYourself(_moveComponent->getDir(), delta);
 }
 
 bool
@@ -67,19 +94,22 @@ Arkanoid::EnergyBall::onContact (
     cocos2d::PhysicsContact& contact,
     cocos2d::Node& node)
 {
-  cocos2d::Vec2 dir;
-  if(node.getTag() == _tagManager->getTag("Vaus")) {
-    dir = hitVaus(node);
-    _moveComponent->setDir(dir.getNormalized());
-    return;
-  }
+
   if(node.getTag() == _tagManager->getTag("EndArea")) {
-    _moveComponent->setSpeed(0);
-    _sceneManager->changeScene<TitleScene>();
+    onOutArena();
     return;
   }
 
-  dir = bounce(contact);
+  callNodeHitFunc(node);
+  runAction(_hitAnimSeq);
+  cocos2d::Vec2 dir;
+  if(node.getTag() == _tagManager->getTag("Vaus")) {
+    dir = hitVaus(node);
+  }
+  else {
+    dir = bounce(contact);
+  }
+  setPosition(getPosition() + dir.getNormalized() * 1);
   _moveComponent->setDir(dir.getNormalized());
 }
 
@@ -103,4 +133,32 @@ Arkanoid::EnergyBall::hitVaus(cocos2d::Node& vaus) {
   dir = getPosition() - vaus.getPosition();
   dir.y = dir.y > 0 ? dir.y : dir.y * -1;
   return dir;
+}
+
+void
+Arkanoid::EnergyBall::onOutArena() {
+  _moveComponent->setSpeed(0);
+  _gameManager->onBallOutSpace();
+}
+
+void
+Arkanoid::EnergyBall::callNodeHitFunc(
+    cocos2d::Node& node)
+{
+  if(auto iHit = dynamic_cast<IHit*>(&node)) {
+      iHit->hit(*this);
+  }
+}
+
+void
+Arkanoid::EnergyBall::rotateYourself(
+    const cocos2d::Vec2& dir,
+    float delta)
+{
+  auto dot = 0 * dir.x + -1 * dir.y;
+  auto det = 0 * dir.y - -1 * dir.x;
+  float rotate = atan2(dot, det);
+  rotate = rotate * (180 / M_PI);
+
+  setRotation(rotate);
 }
