@@ -2,7 +2,6 @@
 #define __VAUS_RESOURCE_H__
 
 #include "cocos2d.h"
-#include "cocos2dx-extension/PixelSprite.h"
 #include "resource/ResourceHelper.h"
 
 namespace Arkanoid::Resource {
@@ -44,7 +43,10 @@ namespace Arkanoid::Resource {
 
   inline static cocos2d::Animation*
   createVausExlodeAnim() {
-    return createAnimation("Vaus/Vaus-Explode.plist", "Vaus-Explode-%d.png", 1, 3);
+    auto anim = createAnimation("Vaus/Vaus-Explode.plist", "Vaus-Explode-%d.png", 1, 3);
+    anim->setDelayPerUnit(.2f);
+    anim->setRestoreOriginalFrame(true);
+    return anim;
   }
 }
 
