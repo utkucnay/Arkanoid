@@ -7,9 +7,9 @@ namespace Arkanoid::Pool {
   template<typename T>
   class Pool {
   public:
-    Pool(const T& prefab, int count) {
+    Pool(int count) {
       for(int i = 0; i < count; i++) {
-        _pool.push(prefab.clone());
+        _pool.push(T::create());
       }
     }
     ~Pool() {
