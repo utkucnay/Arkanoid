@@ -7,17 +7,16 @@
 namespace Arkanoid::Components {
   class HealthComponent : public Arkanoid::Component {
   public:
-    virtual void onEnter()            override;
-    virtual void update(float delta)  override;
-    virtual void onExit()             override;
+    virtual void onEnter()            override {}
+    virtual void update(float delta)  override {}
+    virtual void onExit()             override {}
 
 
-    inline bool isDeath() const { return m_health <= 0; };
-    inline void incrementHealth(int num) { m_health += num; }
-    inline void reciveDamage(int num) { m_health -= num; }
-    inline int getHealth() const { return m_health; }
+    inline virtual bool isDeath() const { return m_health <= 0; };
+    inline virtual void incrementHealth(int num) { m_health += num; }
+    inline virtual void decraseHealth(int num) { m_health -= num; }
+    inline virtual int getHealth() const { return m_health; }
 
-    void Reset();
   private:
     int m_health;
     int m_maxHealth;

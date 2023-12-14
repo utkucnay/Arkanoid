@@ -11,7 +11,7 @@ namespace Arkanoid::Components {
     virtual void update(float delta) override;
 
   public:
-    inline void setTarget(const cocos2d::Vec2& target) { _target = target; }
+    virtual inline void setTarget(const cocos2d::Vec2& target) { _target = target; }
     inline void setMaxSpeed(float maxSpeed) { _maxSpeed = maxSpeed; }
 
   protected:

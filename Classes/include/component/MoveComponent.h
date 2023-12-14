@@ -19,7 +19,7 @@ namespace Arkanoid::Components {
 
     inline cocos2d::Vec2  getVelocity()   const { return _dir * _speed; }
     inline float          getSpeed()      const { return _speed; }
-    inline cocos2d::Vec2  getDir()        const { return _dir; }
+    inline cocos2d::Vec2  getDir()        const { return _dir.getNormalized(); }
 
   protected:
     cocos2d::Vec2 _dir;
