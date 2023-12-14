@@ -11,16 +11,16 @@ namespace Arkanoid {
         update(delta);
     }
 
-    virtual void onEnter()            = 0;
-    virtual void update(float delta)  = 0;
-    virtual void onExit()             = 0;
+    virtual void onEnter()            {};
+    virtual void update(float delta)  {};
+    virtual void onExit()             {};
 
     inline void setEnabled(bool enabled)  { _enabled = enabled; }
     inline bool getEnabled() const        { return _enabled; }
 
     inline void setOwner(cocos2d::Node& owner) { _owner = &owner; }
   protected:
-    bool            _enabled;
+    bool            _enabled{true};
     cocos2d::Node*  _owner;
   };
 };
