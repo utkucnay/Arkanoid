@@ -1,21 +1,10 @@
 #include "scene/ActionScene.h"
 #include "GameInstall.h"
-#include "actor/Vaus.h"
-#include "component/Component.h"
-#include "component/HealthComponent.h"
-#include "component/InputHandleComponent.h"
-#include "component/MobileInputHandleComponent.h"
-#include "component/MouseInputHandleComponent.h"
-#include "component/MoveComponent.h"
-#include "component/TargetMoveComponent.h"
-#include "diContainer/DIContainer.h"
-#include "physics/CCPhysicsBody.h"
-#include "physics/CCPhysicsShape.h"
-#include "physics/CCPhysicsWorld.h"
 #include "resource/Resource.h"
 #include "config/sceneConfig/ActionSceneConfig.h"
-#include "scene/TitleScene.h"
+#include "actor/Vaus.h"
 #include "actor/EnergyBall.h"
+#include "actor/Column.h"
 
 bool
 Arkanoid::ActionScene::init() {
@@ -27,60 +16,59 @@ Arkanoid::ActionScene::init() {
     cocos2d::log("Not init Physics!");
     return false;
   }
-  DI::DIContainer diContainer;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-  diContainer.addFactory<Components::InputHandleComponent, Components::MouseInputHandleComponent>();
-#else
-  diContainer.addFactory<Components::InputHandleComponent, Components::MobileInputHandleComponent>();
-#endif
-  diContainer.addFactory<Components::TargetMoveComponent, Components::TargetMoveComponent>();
-  diContainer.addFactory<Components::MoveComponent, Components::MoveComponent>();
-  auto config = getActionSceneConfig();
-
 
   getPhysicsWorld()->setDebugDrawMask(cocos2d::PhysicsWorld::DEBUGDRAW_SHAPE);
-  auto tagManager = gameDIContainer.getSingle<Manager::TagManager>();
+  auto config = getActionSceneConfig();
 
   Vaus* vaus = Vaus::create();
-  vaus->inject(diContainer);
-  vaus->setTag(tagManager->getTag("Vaus"));
-  vaus->setPhysicsBody(cocos2d::PhysicsBody::createBox(cocos2d::Size(32, 8)));
-  vaus->getPhysicsBody()->setDynamic(false);
-  vaus->getPhysicsBody()->setContactTestBitmask(0xFFFFFFFF);
-  setNodeConfig(vaus, config->vaus);
+  vaus->inject(config->vaus.diContainer);
+  vaus->inject(gameDIContainer);
+
+  setNodeConfig(vaus, config->vaus.nodeConfig);
+  setPhysicConfig(vaus, config->vaus.physicConfig);
 
   auto* energyBall = Arkanoid::EnergyBall::create();
-  energyBall->inject(diContainer);
-  energyBall->setTag(tagManager->getTag("EnergyBall"));
-  setNodeConfig(energyBall, config->energyBall);
-  energyBall->setPhysicsBody(cocos2d::PhysicsBody::createBox(cocos2d::Size(8, 4)));
-  energyBall->getPhysicsBody()->setDynamic(false);
-  energyBall->getPhysicsBody()->setContactTestBitmask(0xFFFFFFFF);
+  energyBall->inject(config->energyBall.diContainer);
+  energyBall->inject(gameDIContainer);
+  setNodeConfig(energyBall, config->energyBall.nodeConfig);
+  setPhysicConfig(energyBall, config->energyBall.physicConfig);
 
-  cocos2d::Node* columnLeft = Resource::createColumnLeft();
-  columnLeft->setPhysicsBody(cocos2d::PhysicsBody::createBox(cocos2d::Size(8, 232)));
-  columnLeft->getPhysicsBody()->setDynamic(false);
-  columnLeft->getPhysicsBody()->setContactTestBitmask(0xFFFFFFFF);
+  Column* columnLeft = Column::create();
+  columnLeft->inject(config->columnLeft.diContainer);
+  columnLeft->inject(gameDIContainer);
+
+  columnLeft->setSpriteAndAnim(
+      *Resource::createColumnLeft(),
+      Resource::createColumnLeftHitAnim());
+
   setNodeConfig(columnLeft, config->columnLeft.nodeConfig);
+  setPhysicConfig(columnLeft, config->columnLeft.physicConfig);
 
-  cocos2d::Node* columnUp = Resource::createColumnUp();
-  columnUp->setPhysicsBody(cocos2d::PhysicsBody::createBox(cocos2d::Size(176, 8)));
-  columnUp->getPhysicsBody()->setDynamic(false);
-  columnUp->getPhysicsBody()->setContactTestBitmask(0xFFFFFFFF);
+  Column* columnUp = Column::create();
+  columnUp->inject(config->columnUp.diContainer);
+  columnUp->inject(gameDIContainer);
+
+  columnUp->setSpriteAndAnim(
+      *Resource::createColumnUp(),
+      Resource::createColumnUpHitAnim());
+
   setNodeConfig(columnUp, config->columnUp.nodeConfig);
+  setPhysicConfig(columnUp, config->columnUp.physicConfig);
 
-  cocos2d::Node* columnRight = Resource::createColumnRight();
-  columnRight->setPhysicsBody(cocos2d::PhysicsBody::createBox(cocos2d::Size(8, 232)));
-  columnRight->getPhysicsBody()->setDynamic(false);
-  columnRight->getPhysicsBody()->setContactTestBitmask(0xFFFFFFFF);
+  Column* columnRight = Column::create();
+  columnRight->inject(config->columnRight.diContainer);
+  columnRight->inject(gameDIContainer);
+
+  columnRight->setSpriteAndAnim(
+      *Resource::createColumnRight(),
+      Resource::createColumnRightHitAnim());
+
   setNodeConfig(columnRight, config->columnRight.nodeConfig);
+  setPhysicConfig(columnRight, config->columnRight.physicConfig);
 
   auto endArea = cocos2d::Node::create();
-  endArea->setPosition(cocos2d:: Vec2(104, 70));
-  endArea->setTag(tagManager->getTag("EndArea"));
-  endArea->setPhysicsBody(cocos2d::PhysicsBody::createBox(cocos2d::Size(192,8)));
-  endArea->getPhysicsBody()->setDynamic(false);
-  endArea->getPhysicsBody()->setContactTestBitmask(0xFFFFFFFF);
+  setNodeConfig(endArea, config->endArea.nodeConfig);
+  setPhysicConfig(endArea, config->endArea.physicConfig);
 
   cocos2d::Node* field = Resource::createOrangeField();
   setNodeConfig(field, config->field);
@@ -105,7 +93,6 @@ Arkanoid::ActionScene::init() {
   this->addChild(scoreLabel);
   this->addChild(energyBall);
   this->addChild(endArea);
-
   return true;
 }
 

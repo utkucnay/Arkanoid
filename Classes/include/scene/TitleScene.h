@@ -3,7 +3,9 @@
 
 #include "cocos2d.h"
 #include "component/InputHandleComponent.h"
+#include "manager/GameManager.h"
 #include "scene/Scene.h"
+
 
 namespace Arkanoid {
   class TitleScene : public Arkanoid::Scene {
@@ -19,6 +21,7 @@ namespace Arkanoid {
   private:
     std::shared_ptr<Components::InputHandleComponent> _inputHandleComponent;
     bool bIsFirstTap{true};
+    Manager::GameManager* _gameManager;
   };
 }
 
