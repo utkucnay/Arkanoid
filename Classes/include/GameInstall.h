@@ -2,6 +2,7 @@
 #define __GAME_INNSTALL_H__
 
 #include "diContainer/DIContainer.h"
+#include "manager/GameManager.h"
 #include "manager/LevelManager.h"
 #include "manager/SceneManager.h"
 #include "manager/TagManager.h"
@@ -18,6 +19,7 @@ class GameInstall {
       gameDIContainer.addSingle<TagManager, TagManager>();
       gameDIContainer.addSingle<SceneManager, SceneManager>();
       gameDIContainer.addSingle<LevelManager, LevelManager>();
+      gameDIContainer.addSingle<GameManager, GameManager>();
 
       {
         auto tagManager = gameDIContainer.getSingle<TagManager>();
@@ -37,6 +39,10 @@ class GameInstall {
 
       {
         gameDIContainer.getSingle<LevelManager>()->inject(gameDIContainer);
+      }
+
+      {
+        gameDIContainer.getSingle<GameManager>()->inject(gameDIContainer);
       }
     }
 };
