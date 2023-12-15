@@ -2,13 +2,14 @@
 #define __ACTION_SCENE_CONFIG_H__
 
 #include "GameInstall.h"
+#include "component/CameraShakeComponent.h"
 #include "component/HealthComponent.h"
 #include "component/SpriteSqueeze.h"
 #include "manager/TagManager.h"
 enum class Priorty {
-  Background,
-  Foreground,
-  UI
+  Background = -1,
+  Foreground = 1,
+  UI = 2
 };
 
 #include "cocos2d.h"
@@ -99,10 +100,13 @@ static std::shared_ptr<ActionSceneConfig> getActionSceneConfig() {
   cfg->energyBall.diContainer.addFactory<
     SpriteSqueeze,
     SpriteSqueeze>();
+  cfg->energyBall.diContainer.addFactory<
+    CameraShakeComponent,
+    CameraShakeComponent>();
 
   cfg->columnLeft.nodeConfig.pos = cocos2d::Vec2(12, 190);
   cfg->columnLeft.nodeConfig.anchorPoint = cocos2d::Vec2(0, 1);
-  cfg->columnLeft.nodeConfig.positionZ = (int)Priorty::Background;
+  cfg->columnLeft.nodeConfig.positionZ = (int)Priorty::Foreground;
 
   cfg->columnLeft.physicConfig.sizeBox = cocos2d::Size(8, 232);
   cfg->columnLeft.physicConfig.isDynamic = false;
@@ -114,7 +118,7 @@ static std::shared_ptr<ActionSceneConfig> getActionSceneConfig() {
 
   cfg->columnUp.nodeConfig.pos = cocos2d::Vec2(104, 302);
   cfg->columnUp.nodeConfig.anchorPoint = cocos2d::Vec2(0, 0);
-  cfg->columnUp.nodeConfig.positionZ = (int)Priorty::Background;
+  cfg->columnUp.nodeConfig.positionZ = (int)Priorty::Foreground;
 
   cfg->columnUp.physicConfig.sizeBox = cocos2d::Size(176, 8);
   cfg->columnUp.physicConfig.isDynamic = false;
@@ -126,7 +130,7 @@ static std::shared_ptr<ActionSceneConfig> getActionSceneConfig() {
 
   cfg->columnRight.nodeConfig.pos = cocos2d::Vec2(196, 190);
   cfg->columnRight.nodeConfig.anchorPoint = cocos2d::Vec2(0, 1);
-  cfg->columnRight.nodeConfig.positionZ = (int)Priorty::Background;
+  cfg->columnRight.nodeConfig.positionZ = (int)Priorty::Foreground;
 
   cfg->columnRight.physicConfig.sizeBox = cocos2d::Size(8, 232);
   cfg->columnRight.physicConfig.isDynamic = false;

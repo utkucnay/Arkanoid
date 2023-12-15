@@ -80,6 +80,7 @@ list(APPEND GAME_SOURCE
      Classes/src/component/TargetMoveComponent.cpp
      Classes/src/component/AnimationComponent.cpp
      Classes/src/component/LimitedTargetMoveComponent.cpp
+     Classes/src/component/CameraShakeComponent.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h

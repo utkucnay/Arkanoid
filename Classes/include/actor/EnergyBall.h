@@ -2,6 +2,7 @@
 #define __ENERGY_BALL_H__
 
 #include "cocos2d.h"
+#include "component/CameraShakeComponent.h"
 #include "component/MoveComponent.h"
 #include "component/SpriteSqueeze.h"
 #include "diContainer/DIContainer.h"
@@ -31,6 +32,7 @@ namespace Arkanoid {
   private:
     std::shared_ptr<Components::MoveComponent> _moveComponent;
     std::shared_ptr<Components::SpriteSqueeze> _spriteSqueeze;
+    std::shared_ptr<Components::CameraShakeComponent> _cameraShakeComponent;
     cocos2d::RefPtr<cocos2d::Sequence> _hitAnimSeq;
     cocos2d::Sprite* _sprite;
     Manager::TagManager* _tagManager;

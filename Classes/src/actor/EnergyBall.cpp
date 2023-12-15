@@ -1,6 +1,7 @@
 #include "actor/EnergyBall.h"
 #include "2d/CCActionInterval.h"
 #include "actor/IHit.h"
+#include "component/CameraShakeComponent.h"
 #include "resource/Resource.h"
 
 bool
@@ -34,6 +35,13 @@ Arkanoid::EnergyBall::inject(
 
     _spriteSqueeze->setOwner(*this);
   }
+  if(diContainer.hasFactory<Components::CameraShakeComponent>()) {
+    _cameraShakeComponent = diContainer.getFactory
+      <Components::CameraShakeComponent>();
+
+    _cameraShakeComponent->setOwner(*this);
+    _cameraShakeComponent->inject(diContainer);
+  }
   if(diContainer.hasSingle<Manager::TagManager>())
     _tagManager = diContainer.getSingle<Manager::TagManager>();
   if(diContainer.hasSingle<Manager::SceneManager>())
@@ -49,16 +57,18 @@ Arkanoid::EnergyBall::onEnter() {
   _moveComponent->setVelocity(cocos2d::Vec2(5, 10));
   _moveComponent->setSpeed(100);
 
+  auto ls = cocos2d::ScaleTo::create(0, 2, 2);
+  auto dls = cocos2d::DelayTime::create(.05f);
   auto fs = cocos2d::ScaleTo::create(.1f, 1.5, .5);
-  auto dl = cocos2d::DelayTime::create(.2f);
+  auto dl = cocos2d::DelayTime::create(.05f);
   auto fs2 = cocos2d::ScaleTo::create(.1f, 1, 1);
-  auto dl2 = cocos2d::DelayTime::create(.2f);
+  auto dl2 = cocos2d::DelayTime::create(.05f);
   auto fs3 = cocos2d::ScaleTo::create(.1f, .5, 1.5);
-  auto dl3 = cocos2d::DelayTime::create(.2f);
+  auto dl3 = cocos2d::DelayTime::create(.05f);
   auto fs4 = cocos2d::ScaleTo::create(.1f, 1.25, .75);
-  auto dl4 = cocos2d::DelayTime::create(.2f);
+  auto dl4 = cocos2d::DelayTime::create(.05f);
   auto fs5 = cocos2d::ScaleTo::create(.1f, 1, 1);
-  _hitAnimSeq = cocos2d::Sequence::create(fs, dl, fs2, dl2, fs3, dl3,
+  _hitAnimSeq = cocos2d::Sequence::create(ls, dls, fs, dl, fs2, dl2, fs3, dl3,
         fs4, dl4, fs5, NULL);
   _hitAnimSeq->setTag(10);
   setPositionZ(4);
@@ -100,7 +110,11 @@ Arkanoid::EnergyBall::onContact (
     return;
   }
 
+  _cameraShakeComponent->shake(
+      _moveComponent->getDir() * -1,
+      _moveComponent->getSpeed() / 400);
   callNodeHitFunc(node);
+  stopActionByTag(10);
   runAction(_hitAnimSeq);
   cocos2d::Vec2 dir;
   if(node.getTag() == _tagManager->getTag("Vaus")) {
