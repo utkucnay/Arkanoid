@@ -7,7 +7,7 @@ Arkanoid::Scene::setNodeConfig(
 {
   node->setPosition(nodeConfig.pos);
   node->setAnchorPoint(nodeConfig.anchorPoint);
-  node->setPositionZ(nodeConfig.positionZ);
+  node->setGlobalZOrder(nodeConfig.positionZ);
   node->setTag(nodeConfig.tag);
 }
 
