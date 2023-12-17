@@ -24,5 +24,4 @@ Arkanoid::Column::setSpriteAndAnim(
     _hitAnimation->setAnim(*animation, sprite);
   _sprite = &sprite;
   this->addChild(_sprite);
-
 }
