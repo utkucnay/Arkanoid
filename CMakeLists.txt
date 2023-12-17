@@ -65,14 +65,20 @@ list(APPEND GAME_SOURCE
      Classes/src/state/StateMachine.cpp
 
      Classes/src/manager/GameManager.cpp
+     Classes/src/manager/LevelManager.cpp
+
+     Classes/src/level/Level.cpp
 
      Classes/src/scene/ActionScene.cpp
      Classes/src/scene/TitleScene.cpp
      Classes/src/scene/Scene.cpp
+     Classes/src/scene/ShowLevelScene.cpp
 
      Classes/src/actor/Vaus.cpp
      Classes/src/actor/EnergyBall.cpp
      Classes/src/actor/Column.cpp
+     Classes/src/actor/Brick.cpp
+     Classes/src/actor/AnimatedBrick.cpp
 
      Classes/src/component/MouseInputHandleComponent.cpp
      Classes/src/component/MobileInputHandleComponent.cpp
