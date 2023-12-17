@@ -21,10 +21,12 @@ namespace Arkanoid::Manager {
     void onBallOutSpace();
     void endDestroyVaus(bool isDeath);
     void onDestroyLastBricks();
+    void sceneLoad();
     inline void setVaus(Vaus* vaus) { _vaus = vaus; }
 
   private:
     Vaus* _vaus;
+    cocos2d::Director* _director;
     SceneManager* _sceneManager;
     LevelManager* _levelManager;
   };

@@ -183,18 +183,18 @@ Arkanoid::EnergyBall::calRotate(
 
   void
   Arkanoid::EnergyBall::createHitSequance() {
-    auto ls = cocos2d::ScaleTo::create(0, 2, 2);
-    auto dls = cocos2d::DelayTime::create(.05f);
-    auto fs = cocos2d::ScaleTo::create(.1f, 1.5, .5);
-    auto dl = cocos2d::DelayTime::create(.05f);
-    auto fs2 = cocos2d::ScaleTo::create(.1f, 1, 1);
-    auto dl2 = cocos2d::DelayTime::create(.05f);
-    auto fs3 = cocos2d::ScaleTo::create(.1f, .5, 1.5);
-    auto dl3 = cocos2d::DelayTime::create(.05f);
-    auto fs4 = cocos2d::ScaleTo::create(.1f, 1.25, .75);
-    auto dl4 = cocos2d::DelayTime::create(.05f);
-    auto fs5 = cocos2d::ScaleTo::create(.1f, 1, 1);
-    _hitAnimSeq = cocos2d::Sequence::create(ls, dls, fs, dl, fs2, dl2, fs3, dl3,
-        fs4, dl4, fs5, NULL);
+    _hitAnimSeq = cocos2d::Sequence::create(
+        cocos2d::ScaleTo::create(0, 2, 2),
+        cocos2d::DelayTime::create(.05f),
+        cocos2d::ScaleTo::create(.1f, 1.5, .5),
+        cocos2d::DelayTime::create(.05f),
+        cocos2d::ScaleTo::create(.1f, 1, 1),
+        cocos2d::DelayTime::create(.05f),
+        cocos2d::ScaleTo::create(.1f, .5, 1.5),
+        cocos2d::DelayTime::create(.05f),
+        cocos2d::ScaleTo::create(.1f, 1.25, .75),
+        cocos2d::DelayTime::create(.05f),
+        cocos2d::ScaleTo::create(.1f, 1, 1),
+        NULL);
     _hitAnimSeq->setTag(10);
   }

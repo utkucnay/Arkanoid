@@ -19,10 +19,11 @@ Arkanoid::Components::CameraShakeComponent::shake(
     camera->stopActionByTag(11);
     camera->setPosition(cocos2d::Vec2());
   }
-  auto l1 = cocos2d::MoveTo::create(.2f, dir * power * 20);
-  auto l2 = cocos2d::MoveTo::create(.6f, cocos2d::Vec2());
-  auto bounceL2 = cocos2d::EaseBounceOut::create(l2);
-  _sequance = cocos2d::Sequence::create(l1, bounceL2, NULL);
+  _sequance = cocos2d::Sequence::create(
+      cocos2d::MoveTo::create(.2f, dir * power * 20),
+      cocos2d::EaseBounceOut::create(
+        cocos2d::MoveTo::create(.6f, cocos2d::Vec2())),
+      NULL);
   _sequance->setTag(11);
   camera->runAction(_sequance);
 }
