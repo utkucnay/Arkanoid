@@ -16,10 +16,10 @@ namespace Arkanoid::Components {
     inline virtual void incrementHealth(int num) { m_health += num; }
     inline virtual void decraseHealth(int num) { m_health -= num; }
     inline virtual int getHealth() const { return m_health; }
+    inline virtual void setHealth(int health) { m_health = health; }
 
-  private:
-    int m_health;
-    int m_maxHealth;
+  protected:
+    int m_health{0};
   };
 };
 
