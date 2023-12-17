@@ -1,31 +1,16 @@
 #include "actor/Vaus.h"
-#include "component/AnimationComponent.h"
-#include "component/HealthComponent.h"
-#include "component/LimitedTargetMoveComponent.h"
-#include "component/SpriteSqueeze.h"
+#include "manager/EventManager.h"
 #include "resource/Resource.h"
 
 bool
 Arkanoid::Vaus::init() {
-  _vausParts[0] = Resource::createVausLeftSprite();
-  _vausParts[1] = Resource::createVausMidSprite();
-  _vausParts[2] = Resource::createVausMidSprite();
-  _vausParts[3] = Resource::createVausMidSprite();
-  _vausParts[4] = Resource::createVausMidSprite();
-  _vausParts[5] = Resource::createVausRightSprite();
+  _sprite = Resource::createVausSprite();
+  this->addChild(_sprite);
 
-  _vausAttackParts[0] = Resource::createVausAttackLeftSprite();
-
-  _vausParts[0]->setPosition(cocos2d::Vec2(-12, 0));
-  _vausParts[1]->setPosition(cocos2d::Vec2(-4, 0));
-  _vausParts[2]->setPosition(cocos2d::Vec2(-4, 0));
-  _vausParts[3]->setPosition(cocos2d::Vec2(4, 0));
-  _vausParts[4]->setPosition(cocos2d::Vec2(4, 0));
-  _vausParts[5]->setPosition(cocos2d::Vec2(12, 0));
-
-  for (size_t i = 0; i < 6; i++) {
-      this->addChild(_vausParts[i]);
-  }
+  auto energyBL = cocos2d::EventListenerCustom::create(
+      EventHelper::getEnergyBallHit(),
+      CC_CALLBACK_1(Vaus::energyBallHitSomething, this));
+  _eventDispatcher->addEventListenerWithSceneGraphPriority(energyBL, this);
 
   this->scheduleUpdate();
 
@@ -61,7 +46,7 @@ Arkanoid::Vaus::inject(
     _destroyAnimComponent->setOwner(*this);
     _destroyAnimComponent->setAnim(
         *Resource::createVausExlodeAnim(),
-        *this);
+        *_sprite);
   }
   if(diContainer.hasFactory<Components::HealthComponent>()) {
     _healthComponent = diContainer.getFactory<Components::HealthComponent>();
@@ -106,6 +91,7 @@ Arkanoid::Vaus::update(float delta) {
 
 void
 Arkanoid::Vaus::onExit() {
+  _gameManager->setVaus(nullptr);
 }
 
 void
@@ -128,6 +114,7 @@ void
 Arkanoid::Vaus::startDestroyVaus() {
   if(_destroyAnimComponent->hasAnim())
     _destroyAnimComponent->animate();
+
   _targetMoveComponent->setEnabled(false);
 }
 
@@ -135,4 +122,20 @@ void
 Arkanoid::Vaus::endDestroyVaus() {
   _healthComponent->incrementHealth(-1);
   _gameManager->endDestroyVaus(_healthComponent->isDeath());
+}
+
+
+void
+Arkanoid::Vaus::energyBallHitSomething(
+    cocos2d::EventCustom* event)
+{
+  stopActionByTag(22);
+
+  auto seq = cocos2d::Sequence::create(
+      cocos2d::ScaleTo::create(1.25, 1.25, .75),
+      cocos2d::ScaleTo::create(.1, 1, 1),
+      NULL);
+  seq->setTag(22);
+
+  runAction(seq);
 }

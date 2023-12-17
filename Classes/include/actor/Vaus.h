@@ -1,16 +1,16 @@
 #ifndef __VAUS_H__
 #define __VAUS_H__
 
-#include "actor/IHit.h"
 #include "cocos2d.h"
-#include "component/AnimationComponent.h"
-#include "component/Component.h"
-#include "component/LimitedTargetMoveComponent.h"
-#include "component/SpriteSqueeze.h"
-#include "component/TargetMoveComponent.h"
+#include "actor/IHit.h"
 #include "diContainer/DIContainer.h"
 #include "manager/GameManager.h"
 #include "state/StateMachine.h"
+#include "component/AnimationComponent.h"
+#include "component/Component.h"
+#include "component/LimitedTargetMoveComponent.h"
+#include "component/SpriteSqueezeComponent.h"
+#include "component/TargetMoveComponent.h"
 #include "component/InputHandleComponent.h"
 #include "component/HealthComponent.h"
 
@@ -19,7 +19,7 @@ namespace Arkanoid::Manager {
 }
 
 namespace Arkanoid {
-  class Vaus : public cocos2d::Sprite, public IHit {
+  class Vaus : public cocos2d::Node, public IHit {
   public:
     bool init() override;
     CREATE_FUNC(Vaus);
@@ -35,12 +35,12 @@ namespace Arkanoid {
     void hit(const cocos2d::Node& node) override;
     void startDestroyVaus();
     void endDestroyVaus();
+    void energyBallHitSomething(cocos2d::EventCustom* event);
   private:
     void onMove(const Components::InputHandle& inputHandle);
 
   private:
-    std::array<cocos2d::RefPtr<cocos2d::Sprite>, 6> _vausParts;
-    std::array<cocos2d::RefPtr<cocos2d::Sprite>, 4> _vausAttackParts;
+    cocos2d::Sprite* _sprite;
     std::unique_ptr<StateMachine> _stateMachine;
     Manager::GameManager* _gameManager;
 
