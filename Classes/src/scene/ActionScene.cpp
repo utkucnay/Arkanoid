@@ -21,7 +21,7 @@ Arkanoid::ActionScene::init() {
     return false;
   }
 
-  getPhysicsWorld()->setDebugDrawMask(cocos2d::PhysicsWorld::DEBUGDRAW_SHAPE);
+ // getPhysicsWorld()->setDebugDrawMask(cocos2d::PhysicsWorld::DEBUGDRAW_SHAPE);
   auto config = getActionSceneConfig();
 
   Vaus* vaus = Vaus::create();
