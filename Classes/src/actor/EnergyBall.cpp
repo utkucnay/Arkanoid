@@ -65,7 +65,7 @@ Arkanoid::EnergyBall::onEnter() {
   _spriteSqueeze->setSqueeze(cocos2d::Vec2(1.25, .75));
   _moveComponent->onEnter();
   _moveComponent->setVelocity(cocos2d::Vec2(5, 10));
-  _moveComponent->setSpeed(0);
+  _moveComponent->setSpeed(100);
 
   setPositionZ(4);
 }
@@ -100,6 +100,8 @@ Arkanoid::EnergyBall::onContact (
     cocos2d::PhysicsContact& contact,
     cocos2d::Node& node)
 {
+
+  _moveComponent->setSpeed(_moveComponent->getSpeed() + 1);
 
   _cameraShakeComponent->shake(
       _moveComponent->getDir() * -1,

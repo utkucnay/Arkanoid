@@ -9,7 +9,7 @@
 #include "component/HealthComponent.h"
 #include "component/ImmuneHealthComponent.h"
 #include "config/Cocos2dConfig.h"
-#include "config/actorConfig/BrickConfid.h"
+#include "config/actorConfig/BrickConfig.h"
 #include "diContainer/DIContainer.h"
 #include "resource/BlockResource.h"
 #include "scene/Scene.h"
