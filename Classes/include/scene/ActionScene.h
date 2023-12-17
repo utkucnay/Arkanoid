@@ -10,6 +10,9 @@ namespace Arkanoid {
     static cocos2d::Scene* createScene();
     bool init() override;
     CREATE_FUNC(ActionScene);
+
+  private:
+    void syncLevel();
   };
 }
 

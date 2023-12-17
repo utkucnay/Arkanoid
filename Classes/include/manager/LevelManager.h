@@ -3,27 +3,32 @@
 
 #include "cocos2d.h"
 #include "diContainer/DIContainer.h"
+#include "level/Level.h"
+#include <cstdint>
 
 namespace Arkanoid::Manager {
   class LevelManager {
   public:
-    void nextLevel() {
+    inline void nextLevel() {
       _level++;
-      _eventDispatcher->dispatchCustomEvent("NextLevel");
     };
 
-    void resetLevel() {
+    inline void resetLevel() {
       _level = 0;
-      _eventDispatcher->dispatchCustomEvent("ResetLevel");
     };
 
-    void inject(const DI::DIContainer& diContainer) {
-      _eventDispatcher = diContainer.getCocosSingle<cocos2d::Director>()->getEventDispatcher();
-    }
+    void inject(const DI::DIContainer& diContainer);
+    inline void addLevel(const Level& level) { _levels.push_back(level); }
+    void createLevel(cocos2d::Scene* scene);
+    inline uint8_t getLevel() { return _level; }
+  private:
+    Brick* createBrick(BrickInfo brickInfo);
+    cocos2d::Sprite* createField();
 
   private:
     uint8_t _level{0};
     cocos2d::EventDispatcher* _eventDispatcher;
+    std::vector<Level> _levels;
   };
 }
 #endif

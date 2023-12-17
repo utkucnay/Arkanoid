@@ -1,4 +1,5 @@
 #include "scene/TitleScene.h"
+#include "GameInstall.h"
 #include "component/InputHandleComponent.h"
 #include "diContainer/DIContainer.h"
 #include "resource/Resource.h"
@@ -32,9 +33,11 @@ Arkanoid::TitleScene::init() {
 #else
   diContainer.addFactory<Components::InputHandleComponent, Components::MobileInputHandleComponent>();
 #endif
+
   _inputHandleComponent = diContainer.getFactory<Components::InputHandleComponent>();
   _inputHandleComponent->setOwner(*this);
-  _inputHandleComponent->onBegan = CC_CALLBACK_1(Arkanoid::TitleScene::onTap, this);
+
+  _gameManager = gameDIContainer.getSingle<Manager::GameManager>();
   this->addChild(titleSprite);
   this->addChild(taitoSprite);
   this->addChild(infoText);
@@ -44,6 +47,7 @@ Arkanoid::TitleScene::init() {
 void
 Arkanoid::TitleScene::onEnter() {
   Scene::onEnter();
+  _inputHandleComponent->onBegan = CC_CALLBACK_1(Arkanoid::TitleScene::onTap, this);
   _inputHandleComponent->onEnter();
 }
 
@@ -52,15 +56,9 @@ Arkanoid::TitleScene::onTap(const Components::InputHandle& handle) {
   if(!bIsFirstTap) {
     return;
   }
-
   bIsFirstTap = false;
-  //TODO(utku): add sfx
-  auto* delay = cocos2d::DelayTime::create(2);
 
-  std::function<void(void)> nextScene = changeScene<Arkanoid::ActionScene>;
-  auto* changeScene = cocos2d::CallFunc::create(nextScene);
-  auto* seq = cocos2d::Sequence::create(delay, changeScene, NULL);
-  runAction(seq);
+  _gameManager->startSession();
 }
 
 cocos2d::Scene*

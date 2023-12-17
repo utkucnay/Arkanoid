@@ -24,4 +24,9 @@ struct PhysicConfig {
   int bitmask;
 };
 
+struct PhysicNodeConfig {
+  NodeConfig nodeConfig;
+  PhysicConfig physicConfig;
+};
+
 #endif

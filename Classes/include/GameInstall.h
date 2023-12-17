@@ -1,11 +1,14 @@
 #ifndef __GAME_INNSTALL_H__
 #define __GAME_INNSTALL_H__
 
+#include "config/LevelConfig.h"
 #include "diContainer/DIContainer.h"
+#include "manager/GameManager.h"
 #include "manager/LevelManager.h"
 #include "manager/SceneManager.h"
 #include "manager/TagManager.h"
 #include "scene/ActionScene.h"
+#include "scene/ShowLevelScene.h"
 #include "scene/TitleScene.h"
 
 inline DI::DIContainer gameDIContainer;
@@ -18,6 +21,7 @@ class GameInstall {
       gameDIContainer.addSingle<TagManager, TagManager>();
       gameDIContainer.addSingle<SceneManager, SceneManager>();
       gameDIContainer.addSingle<LevelManager, LevelManager>();
+      gameDIContainer.addSingle<GameManager, GameManager>();
 
       {
         auto tagManager = gameDIContainer.getSingle<TagManager>();
@@ -30,13 +34,21 @@ class GameInstall {
       {
         auto sceneManager = gameDIContainer.getSingle<SceneManager>();
         sceneManager->addScene<Arkanoid::TitleScene>();
+        sceneManager->addScene<Arkanoid::ShowLevelScene>();
         sceneManager->addScene<Arkanoid::ActionScene>();
         sceneManager->inject(gameDIContainer);
         sceneManager->setScene();
       }
 
       {
-        gameDIContainer.getSingle<LevelManager>()->inject(gameDIContainer);
+        auto levelManager = gameDIContainer.getSingle<LevelManager>();
+        levelManager->inject(gameDIContainer);
+        levelManager->addLevel(level1);
+        levelManager->addLevel(level2);
+      }
+
+      {
+        gameDIContainer.getSingle<GameManager>()->inject(gameDIContainer);
       }
     }
 };

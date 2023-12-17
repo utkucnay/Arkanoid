@@ -28,7 +28,11 @@ namespace DI {
     }
 
     template<typename T>
+    bool hasSingle() const { return typeSInfo.find(typeid(T).name()) != typeSInfo.end(); }
+
+    template<typename T>
     T* getSingle() const {
+      assert(hasSingle<T>());
       return static_cast<T*>(typeSInfo.at(typeid(T).name()).get());
     }
 
@@ -39,7 +43,11 @@ namespace DI {
     }
 
     template<typename T>
+    bool hasFactory() const { return typeFInfo.find(typeid(T).name()) != typeFInfo.end(); }
+
+    template<typename T>
     std::shared_ptr<T> getFactory() const {
+      assert(hasFactory<T>());
       return std::static_pointer_cast<T>(typeFInfo.at(typeid(T).name()).shrdCtor());
     }
 

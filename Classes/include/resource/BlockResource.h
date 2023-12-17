@@ -50,14 +50,25 @@ namespace Arkanoid::Resource {
     return createPixelSprite("Block/Yellow.png");
   }
 
+  static cocos2d::Sprite*
+  createCyanBlock() {
+    return createPixelSprite("Block/Cyan.png");
+  }
+
   static cocos2d::Animation*
   createGoldHitAnim() {
-    return createAnimation("Block/Gold-Hit.plist", "Block-Gold-%d.png", 2, 6);
+    auto anim = createAnimation("Block/Gold-Hit.plist", "Block-Gold-%d.png", 2, 6);
+    anim->setDelayPerUnit(.1f);
+    anim->setRestoreOriginalFrame(true);
+    return anim;
   }
 
   static cocos2d::Animation*
   createSilverHitAnim() {
-    return createAnimation("Block/Silver-Hit.plist", "Block-Silver-%d.png", 2, 6);
+    auto anim = createAnimation("Block/Silver-Hit.plist", "Block-Silver-%d.png", 2, 6);
+    anim->setDelayPerUnit(.1f);
+    anim->setRestoreOriginalFrame(true);
+    return anim;
   }
 }
 
