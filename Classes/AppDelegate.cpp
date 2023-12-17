@@ -83,7 +83,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
   director->getOpenGLView()->setDesignResolutionSize(
   designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 
-  director->setDisplayStats(true);
+  //director->setDisplayStats(true);
 
   director->setProjection(Director::Projection::_2D);
 

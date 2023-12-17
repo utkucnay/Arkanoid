@@ -1,10 +1,14 @@
 #include "scene/ActionScene.h"
 #include "GameInstall.h"
-#include "resource/Resource.h"
-#include "config/sceneConfig/ActionSceneConfig.h"
+#include "actor/Brick.h"
 #include "actor/Vaus.h"
 #include "actor/EnergyBall.h"
 #include "actor/Column.h"
+#include "component/HealthComponent.h"
+#include "manager/LevelManager.h"
+#include "prefab/BrickPrefab.h"
+#include "resource/Resource.h"
+#include "config/sceneConfig/ActionSceneConfig.h"
 
 bool
 Arkanoid::ActionScene::init() {
@@ -17,7 +21,7 @@ Arkanoid::ActionScene::init() {
     return false;
   }
 
-  getPhysicsWorld()->setDebugDrawMask(cocos2d::PhysicsWorld::DEBUGDRAW_SHAPE);
+  //getPhysicsWorld()->setDebugDrawMask(cocos2d::PhysicsWorld::DEBUGDRAW_SHAPE);
   auto config = getActionSceneConfig();
 
   Vaus* vaus = Vaus::create();
@@ -44,6 +48,14 @@ Arkanoid::ActionScene::init() {
   setNodeConfig(columnLeft, config->columnLeft.nodeConfig);
   setPhysicConfig(columnLeft, config->columnLeft.physicConfig);
 
+  cocos2d::Node* sColumnLeft = cocos2d::Node::create();
+  setPhysicConfig(sColumnLeft, config->columnLeft.physicConfig);
+  sColumnLeft->setPosition(columnLeft->getPosition());
+  sColumnLeft->setPositionX(
+      columnLeft->getPositionX() -
+      config->columnLeft.physicConfig.sizeBox.width);
+  setPhysicConfig(sColumnLeft, config->columnLeft.physicConfig);
+
   Column* columnUp = Column::create();
   columnUp->inject(config->columnUp.diContainer);
   columnUp->inject(gameDIContainer);
@@ -58,7 +70,6 @@ Arkanoid::ActionScene::init() {
   Column* columnRight = Column::create();
   columnRight->inject(config->columnRight.diContainer);
   columnRight->inject(gameDIContainer);
-
   columnRight->setSpriteAndAnim(
       *Resource::createColumnRight(),
       Resource::createColumnRightHitAnim());
@@ -66,12 +77,17 @@ Arkanoid::ActionScene::init() {
   setNodeConfig(columnRight, config->columnRight.nodeConfig);
   setPhysicConfig(columnRight, config->columnRight.physicConfig);
 
+  cocos2d::Node* sColumnRight = cocos2d::Node::create();
+  setPhysicConfig(sColumnRight, config->columnLeft.physicConfig);
+  sColumnRight->setPosition(columnLeft->getPosition());
+  sColumnRight->setPositionX(
+      columnRight->getPositionX() +
+      config->columnRight.physicConfig.sizeBox.width);
+  setPhysicConfig(sColumnRight, config->columnLeft.physicConfig);
+
   auto endArea = cocos2d::Node::create();
   setNodeConfig(endArea, config->endArea.nodeConfig);
   setPhysicConfig(endArea, config->endArea.physicConfig);
-
-  cocos2d::Node* field = Resource::createOrangeField();
-  setNodeConfig(field, config->field);
 
   cocos2d::Label* highScoreLabel = cocos2d::Label::create();
   setLabelConfig(highScoreLabel, config->highScoreLabel);
@@ -82,18 +98,28 @@ Arkanoid::ActionScene::init() {
   cocos2d::Label* scoreLabel = cocos2d::Label::create();
   setLabelConfig(scoreLabel, config->scoreLabel);
 
-
+  this->addChild(vaus);
+  this->addChild(energyBall);
   this->addChild(columnUp);
   this->addChild(columnLeft);
+  this->addChild(sColumnLeft);
   this->addChild(columnRight);
-  this->addChild(field);
-  this->addChild(vaus);
+  this->addChild(sColumnRight);
   this->addChild(highScoreLabel);
   this->addChild(levelLabel);
   this->addChild(scoreLabel);
-  this->addChild(energyBall);
   this->addChild(endArea);
+
+  syncLevel();
+
   return true;
+}
+
+void
+Arkanoid::ActionScene::syncLevel() {
+  auto levelManager = gameDIContainer.getSingle<Manager::LevelManager>();
+
+  levelManager->createLevel(this);
 }
 
 cocos2d::Scene*

@@ -32,5 +32,5 @@ Arkanoid::Scene::setPhysicConfig(
   auto body = cocos2d::PhysicsBody::createBox(physicsConfig.sizeBox);
   body->setContactTestBitmask(physicsConfig.bitmask);
   body->setDynamic(physicsConfig.isDynamic);
-  node->setPhysicsBody(body);
+  node->addComponent(body);
 }

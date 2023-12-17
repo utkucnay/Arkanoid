@@ -1,11 +1,7 @@
 #ifndef __ACTION_SCENE_CONFIG_H__
 #define __ACTION_SCENE_CONFIG_H__
 
-#include "GameInstall.h"
-#include "component/CameraShakeComponent.h"
-#include "component/HealthComponent.h"
-#include "component/SpriteSqueeze.h"
-#include "manager/TagManager.h"
+#include "component/MaxHealthComponent.h"
 enum class Priorty {
   Background = -1,
   Foreground = 1,
@@ -13,7 +9,11 @@ enum class Priorty {
 };
 
 #include "cocos2d.h"
+#include "GameInstall.h"
 #include "resource/Resource.h"
+#include "manager/TagManager.h"
+#include "component/CameraShakeComponent.h"
+#include "component/HealthComponent.h"
 #include "component/AnimationComponent.h"
 #include "component/MobileInputHandleComponent.h"
 #include "component/InputHandleComponent.h"
@@ -52,7 +52,7 @@ static std::shared_ptr<ActionSceneConfig> getActionSceneConfig() {
   auto tagManager = gameDIContainer.
     getSingle<Arkanoid::Manager::TagManager>();
 
-  cfg->vaus.nodeConfig.pos = cocos2d::Vec2(104, 98);
+  cfg->vaus.nodeConfig.pos = cocos2d::Vec2(104, 102);
   cfg->vaus.nodeConfig.anchorPoint = cocos2d::Vec2(.5, .5);
   cfg->vaus.nodeConfig.positionZ = (int)Priorty::Foreground;
   cfg->vaus.nodeConfig.tag = tagManager->getTag("Vaus");
@@ -80,13 +80,13 @@ static std::shared_ptr<ActionSceneConfig> getActionSceneConfig() {
     AnimationComponent>();
   cfg->vaus.diContainer.addFactory<
     HealthComponent,
-    HealthComponent>();
+    MaxHealthComponent>();
   cfg->vaus.diContainer.addFactory<
     SpriteSqueeze,
     SpriteSqueeze>();
 
-  cfg->energyBall.nodeConfig.pos = cocos2d::Vec2(104, 110);
-  cfg->energyBall.nodeConfig.anchorPoint = cocos2d::Vec2(0, 1);
+  cfg->energyBall.nodeConfig.pos = cocos2d::Vec2(108, 110);
+  cfg->energyBall.nodeConfig.anchorPoint = cocos2d::Vec2(.5, .5);
   cfg->energyBall.nodeConfig.positionZ = (int)Priorty::Foreground;
   cfg->energyBall.nodeConfig.tag = tagManager->getTag("EnergyBall");
 

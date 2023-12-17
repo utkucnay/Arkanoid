@@ -6,10 +6,10 @@
 
 namespace Arkanoid {
   class Scene : public cocos2d::Scene {
-  protected:
-    virtual void setNodeConfig(cocos2d::Node* node, const NodeConfig& nodeConfig);
-    virtual void setLabelConfig(cocos2d::Label* node, const LabelConfig& nodeConfig);
-    virtual void setPhysicConfig(cocos2d::Node* node, const PhysicConfig& physicsConfig);
+  public:
+    static void setNodeConfig(cocos2d::Node* node, const NodeConfig& nodeConfig);
+    static void setLabelConfig(cocos2d::Label* node, const LabelConfig& nodeConfig);
+    static void setPhysicConfig(cocos2d::Node* node, const PhysicConfig& physicsConfig);
   };
 }
 
