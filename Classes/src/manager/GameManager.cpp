@@ -2,6 +2,7 @@
 #include "diContainer/DIContainer.h"
 #include "manager/SceneManager.h"
 #include "scene/ActionScene.h"
+#include "scene/ShowLevelScene.h"
 #include "scene/TitleScene.h"
 
 void
@@ -17,7 +18,7 @@ Arkanoid::Manager::GameManager::startSession() {
   auto* delay = cocos2d::DelayTime::create(2);
 
   auto* changeScene = cocos2d::CallFunc::create([=] () {
-          _sceneManager->changeScene<ActionScene>();
+          _sceneManager->changeScene<ShowLevelScene>();
         }
       );
 
@@ -46,10 +47,14 @@ Arkanoid::Manager::GameManager::onBallOutSpace() {
 
 void
 Arkanoid::Manager::GameManager::endDestroyVaus(bool isDeath) {
-  if(isDeath) {
-    _levelManager->resetLevel();
-    _sceneManager->changeScene<TitleScene>();
-  } else {
-    _sceneManager->changeScene<TitleScene>();
-  }
+  _vaus->removeFromParentAndCleanup(true);
+  auto dt = cocos2d::DelayTime::create(1);
+  auto cb = cocos2d::CallFunc::create([=]() {
+        if(isDeath) {
+          _sceneManager->changeScene<TitleScene>();
+        } else {
+          _sceneManager->changeScene<TitleScene>();
+        }
+      });
+  cocos2d::Director::getInstance()->getRunningScene()->runAction(cocos2d::Sequence::create(dt, cb, NULL));
 }
