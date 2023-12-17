@@ -1,4 +1,5 @@
 #include "manager/GameManager.h"
+#include "actor/Vaus.h"
 #include "diContainer/DIContainer.h"
 #include "manager/SceneManager.h"
 #include "scene/ActionScene.h"
@@ -11,6 +12,7 @@ Arkanoid::Manager::GameManager::inject(
 {
   _sceneManager = diContainer.getSingle<SceneManager>();
   _levelManager = diContainer.getSingle<LevelManager>();
+  _director = diContainer.getCocosSingle<cocos2d::Director>();
 }
 
 void
@@ -48,13 +50,18 @@ Arkanoid::Manager::GameManager::onBallOutSpace() {
 void
 Arkanoid::Manager::GameManager::endDestroyVaus(bool isDeath) {
   _vaus->removeFromParentAndCleanup(true);
-  auto dt = cocos2d::DelayTime::create(1);
-  auto cb = cocos2d::CallFunc::create([=]() {
-        if(isDeath) {
-          _sceneManager->changeScene<TitleScene>();
-        } else {
-          _sceneManager->changeScene<TitleScene>();
-        }
-      });
-  cocos2d::Director::getInstance()->getRunningScene()->runAction(cocos2d::Sequence::create(dt, cb, NULL));
+  _director->getRunningScene()->runAction(
+      cocos2d::Sequence::create(
+        cocos2d::DelayTime::create(1),
+        cocos2d::CallFunc::create(CC_CALLBACK_0(Arkanoid::Manager::GameManager::sceneLoad, this, isDeath)),
+        NULL));
+}
+
+void
+Arkanoid::Manager::GameManager::sceneLoad(bool isDeath) {
+  if(isDeath) {
+    _sceneManager->changeScene<TitleScene>();
+  } else {
+    _sceneManager->changeScene<TitleScene>();
+  }
 }

@@ -21,7 +21,7 @@ namespace Arkanoid::Manager {
     void onBallOutSpace();
     void endDestroyVaus(bool isDeath);
     void onDestroyLastBricks();
-    void sceneLoad();
+    void sceneLoad(bool isDeath);
     inline void setVaus(Vaus* vaus) { _vaus = vaus; }
 
   private:
