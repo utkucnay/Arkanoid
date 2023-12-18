@@ -31,7 +31,6 @@ namespace Arkanoid {
     void createHitSequance();
 
   private:
-    bool bIsContactFrame{false};
     cocos2d::RefPtr<cocos2d::Sequence> _hitAnimSeq;
     cocos2d::Sprite* _sprite;
     cocos2d::MotionStreak* _streak;

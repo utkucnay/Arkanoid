@@ -78,8 +78,6 @@ Arkanoid::EnergyBall::update(float delta) {
   if(this->getNumberOfRunningActionsByTag(10) == 0)
     _spriteSqueeze->setScale(_moveComponent->getSpeed() / 400);
 
-  bIsContactFrame = false;
-
   calRotate(_moveComponent->getVelocity().getNormalized(), delta);
 }
 
@@ -103,9 +101,6 @@ Arkanoid::EnergyBall::onContact (
     cocos2d::PhysicsContact& contact,
     cocos2d::Node& node)
 {
-
-  if(bIsContactFrame) return;
-  bIsContactFrame = true;
 
   _moveComponent->setSpeed(_moveComponent->getSpeed() + .5f);
 
