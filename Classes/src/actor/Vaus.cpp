@@ -121,7 +121,7 @@ Arkanoid::Vaus::startDestroyVaus() {
 void
 Arkanoid::Vaus::endDestroyVaus() {
   _healthComponent->incrementHealth(-1);
-  _gameManager->endDestroyVaus(_healthComponent->isDeath());
+  _gameManager->onEndDestroyVaus(_healthComponent->isDeath());
 }
 
 

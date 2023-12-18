@@ -31,14 +31,17 @@ namespace Arkanoid {
     void createHitSequance();
 
   private:
-    std::shared_ptr<Components::MoveComponent> _moveComponent;
-    std::shared_ptr<Components::SpriteSqueeze> _spriteSqueeze;
-    std::shared_ptr<Components::CameraShakeComponent> _cameraShakeComponent;
+    bool bIsContactFrame{false};
     cocos2d::RefPtr<cocos2d::Sequence> _hitAnimSeq;
     cocos2d::Sprite* _sprite;
     cocos2d::MotionStreak* _streak;
     Manager::TagManager* _tagManager;
     Manager::GameManager* _gameManager;
+
+  private:
+    std::shared_ptr<Components::MoveComponent> _moveComponent;
+    std::shared_ptr<Components::SpriteSqueeze> _spriteSqueeze;
+    std::shared_ptr<Components::CameraShakeComponent> _cameraShakeComponent;
   };
 }
 

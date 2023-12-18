@@ -65,7 +65,7 @@ Arkanoid::EnergyBall::onEnter() {
   _spriteSqueeze->setSqueeze(cocos2d::Vec2(1.25, .75));
   _moveComponent->onEnter();
   _moveComponent->setVelocity(cocos2d::Vec2(5, 10));
-  _moveComponent->setSpeed(100);
+  _moveComponent->setSpeed(80);
 
   setPositionZ(4);
 }
@@ -78,6 +78,8 @@ Arkanoid::EnergyBall::update(float delta) {
   if(this->getNumberOfRunningActionsByTag(10) == 0)
     _spriteSqueeze->setScale(_moveComponent->getSpeed() / 400);
 
+  bIsContactFrame = false;
+
   calRotate(_moveComponent->getVelocity().getNormalized(), delta);
 }
 
@@ -87,6 +89,7 @@ Arkanoid::EnergyBall::onContactBegin(
 {
   auto nodeA = contact.getShapeA()->getBody()->getNode();
   auto nodeB = contact.getShapeB()->getBody()->getNode();
+  if(nullptr == nodeA || nullptr == nodeB) return false;
   if(nodeA->getTag() == this->getTag())
     onContact(contact, *nodeB);
   else if(nodeB->getTag() == this->getTag())
@@ -101,7 +104,10 @@ Arkanoid::EnergyBall::onContact (
     cocos2d::Node& node)
 {
 
-  _moveComponent->setSpeed(_moveComponent->getSpeed() + 1);
+  if(bIsContactFrame) return;
+  bIsContactFrame = true;
+
+  _moveComponent->setSpeed(_moveComponent->getSpeed() + .5f);
 
   _cameraShakeComponent->shake(
       _moveComponent->getDir() * -1,
@@ -126,7 +132,7 @@ Arkanoid::EnergyBall::onContact (
   }
   _moveComponent->setDir(dir.getNormalized());
   stopActionByTag(_hitAnimSeq->getTag());
-  runAction(_hitAnimSeq);
+  _sprite->runAction(_hitAnimSeq);
   callNodeHitFunc(node);
 }
 
@@ -155,7 +161,7 @@ Arkanoid::EnergyBall::hitVaus(cocos2d::Node& vaus) {
 void
 Arkanoid::EnergyBall::onOutArena() {
   _moveComponent->setSpeed(0);
-  _gameManager->onBallOutSpace();
+  _gameManager->onBallOutField();
 }
 
 void

@@ -14,22 +14,33 @@ Arkanoid::Manager::LevelManager::inject(
 
 void
 Arkanoid::Manager::LevelManager::createLevel(
-    cocos2d::Scene* scene)
+    cocos2d::Node* node)
 {
+  if(bUseBrickSnapshot) {
+    for(auto child : _brickSnapshot->getChildren()) {
+      node->addChild(child);
+    }
+    _brickSnapshot->cleanup();
+    return;
+  }
   auto bricks = _levels.at(_level).getBricks();
 
   for(auto& brick : bricks) {
     auto pbrick = createBrick(std::get<0>(brick));
     auto pos = std::get<1>(brick);
     pbrick->setPosition(std::get<1>(brick));
-    scene->addChild(pbrick);
+    node->addChild(pbrick);
   }
 
   auto field = createField();
   field->setPosition(cocos2d::Vec2(16, 298));
   field->setAnchorPoint(cocos2d::Vec2(0, 1));
   field->setGlobalZOrder(-1);
-  scene->addChild(field);
+  node->addChild(field);
+  if(nullptr != _brickSnapshot) {
+      _brickSnapshot->cleanup();
+      _brickSnapshot = nullptr;
+  }
 }
 
 Arkanoid::Brick*

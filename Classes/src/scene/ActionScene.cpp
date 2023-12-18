@@ -21,7 +21,8 @@ Arkanoid::ActionScene::init() {
     return false;
   }
 
- // getPhysicsWorld()->setDebugDrawMask(cocos2d::PhysicsWorld::DEBUGDRAW_SHAPE);
+  _gameManager = gameDIContainer.getSingle<Manager::GameManager>();
+
   auto config = getActionSceneConfig();
 
   Vaus* vaus = Vaus::create();
@@ -98,6 +99,8 @@ Arkanoid::ActionScene::init() {
   cocos2d::Label* scoreLabel = cocos2d::Label::create();
   setLabelConfig(scoreLabel, config->scoreLabel);
 
+  _bricks = cocos2d::Node::create();
+
   this->addChild(vaus);
   this->addChild(energyBall);
   this->addChild(columnUp);
@@ -109,17 +112,34 @@ Arkanoid::ActionScene::init() {
   this->addChild(levelLabel);
   this->addChild(scoreLabel);
   this->addChild(endArea);
+  this->addChild(_bricks);
 
   syncLevel();
 
+  this->scheduleUpdate();
+
   return true;
+}
+
+void
+Arkanoid::ActionScene::update(float delta) {
+  Scene::update(delta);
+  if(_bricks->getChildren().size() <= 1) {
+    _gameManager->requestNextLevel();
+  }
+}
+
+void
+Arkanoid::ActionScene::onExit() {
+  auto levelManager = gameDIContainer.getSingle<Manager::LevelManager>();
+  levelManager->setSnapshot(_bricks);
 }
 
 void
 Arkanoid::ActionScene::syncLevel() {
   auto levelManager = gameDIContainer.getSingle<Manager::LevelManager>();
 
-  levelManager->createLevel(this);
+  levelManager->createLevel(_bricks);
 }
 
 cocos2d::Scene*

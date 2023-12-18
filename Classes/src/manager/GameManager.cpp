@@ -18,7 +18,7 @@ Arkanoid::Manager::GameManager::inject(
 void
 Arkanoid::Manager::GameManager::startSession() {
   auto* delay = cocos2d::DelayTime::create(2);
-
+  _vausHealth = 2;
   auto* changeScene = cocos2d::CallFunc::create([=] () {
           _sceneManager->changeScene<ShowLevelScene>();
         }
@@ -30,16 +30,12 @@ Arkanoid::Manager::GameManager::startSession() {
 
 void
 Arkanoid::Manager::GameManager::endSession() {
-
+  _levelManager->resetLevel();
+  _sceneManager->changeScene<TitleScene>();
 }
 
 void
-Arkanoid::Manager::GameManager::winLevel() {
-  _levelManager->nextLevel();
-}
-
-void
-Arkanoid::Manager::GameManager::onBallOutSpace() {
+Arkanoid::Manager::GameManager::onBallOutField() {
   if(nullptr == _vaus) {
     cocos2d::log("Vaus dont find");
     return;
@@ -48,20 +44,33 @@ Arkanoid::Manager::GameManager::onBallOutSpace() {
 }
 
 void
-Arkanoid::Manager::GameManager::endDestroyVaus(bool isDeath) {
+Arkanoid::Manager::GameManager::onEndDestroyVaus(bool isDeath) {
   _vaus->removeFromParentAndCleanup(true);
   _director->getRunningScene()->runAction(
       cocos2d::Sequence::create(
         cocos2d::DelayTime::create(1),
-        cocos2d::CallFunc::create(CC_CALLBACK_0(Arkanoid::Manager::GameManager::sceneLoad, this, isDeath)),
+        cocos2d::CallFunc::create(CC_CALLBACK_0(
+            Arkanoid::Manager::GameManager::checkVausHealth,
+            this,
+            isDeath)),
         NULL));
 }
 
 void
-Arkanoid::Manager::GameManager::sceneLoad(bool isDeath) {
-  if(isDeath) {
-    _sceneManager->changeScene<TitleScene>();
+Arkanoid::Manager::GameManager::checkVausHealth(bool isDeath) {
+  if(_vausHealth <= 0) {
+    endSession();
   } else {
-    _sceneManager->changeScene<TitleScene>();
+    _vausHealth--;
+    _levelManager->resumeLevel();
+    _sceneManager->changeScene<ShowLevelScene>();
   }
+}
+
+void
+Arkanoid::Manager::GameManager::requestNextLevel() {
+  if(_levelManager->nextLevel())
+    _sceneManager->changeScene<ShowLevelScene>();
+  else
+    endSession();
 }
