@@ -5,10 +5,12 @@
 #include "actor/EnergyBall.h"
 #include "actor/Column.h"
 #include "component/HealthComponent.h"
+#include "label/ScoreLabel.h"
 #include "manager/LevelManager.h"
 #include "prefab/BrickPrefab.h"
 #include "resource/Resource.h"
 #include "config/sceneConfig/ActionSceneConfig.h"
+#include <string>
 
 bool
 Arkanoid::ActionScene::init() {
@@ -99,6 +101,10 @@ Arkanoid::ActionScene::init() {
   cocos2d::Label* scoreLabel = cocos2d::Label::create();
   setLabelConfig(scoreLabel, config->scoreLabel);
 
+  auto score = Arkanoid::Label::ScoreLabel::create();
+  score->inject(gameDIContainer);
+  setNodeConfig(score, config->score.nodeConfig);
+
   _bricks = cocos2d::Node::create();
 
   this->addChild(vaus);
@@ -111,6 +117,7 @@ Arkanoid::ActionScene::init() {
   this->addChild(highScoreLabel);
   this->addChild(levelLabel);
   this->addChild(scoreLabel);
+  this->addChild(score);
   this->addChild(endArea);
   this->addChild(_bricks);
 
@@ -138,6 +145,15 @@ Arkanoid::ActionScene::onExit() {
 void
 Arkanoid::ActionScene::syncLevel() {
   auto levelManager = gameDIContainer.getSingle<Manager::LevelManager>();
+
+  auto levelLabel = cocos2d::Label::createWithTTF(
+      std::to_string(levelManager->getLevel() + 1),
+      Resource::getTTFFontFileName(),
+      10);
+
+  levelLabel->setPosition(cocos2d::Vec2(66, 338));
+  levelLabel->setAnchorPoint(cocos2d::Vec2(0, 1));
+  this->addChild(levelLabel);
 
   levelManager->createLevel(_bricks);
 }

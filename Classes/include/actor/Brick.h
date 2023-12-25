@@ -18,10 +18,15 @@ namespace Arkanoid {
     void setSprite(cocos2d::Sprite& sprite);
     inline void setHealth(int health) { _healthComponent->setHealth(health);}
     void energyBallHitSomething(cocos2d::EventCustom* event);
+    void onDestroy();
+
+  public:
+    inline void setPoints(int points) { _points = points; }
 
   protected:
     std::shared_ptr<Components::HealthComponent> _healthComponent;
     cocos2d::Sprite* _sprite;
+    int _points;
   };
 }
 

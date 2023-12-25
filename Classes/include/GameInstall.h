@@ -1,11 +1,13 @@
 #ifndef __GAME_INNSTALL_H__
 #define __GAME_INNSTALL_H__
 
+#include "CCUserDefault.h"
 #include "config/LevelConfig.h"
 #include "diContainer/DIContainer.h"
 #include "manager/GameManager.h"
 #include "manager/LevelManager.h"
 #include "manager/SceneManager.h"
+#include "manager/ScoreManager.h"
 #include "manager/TagManager.h"
 #include "scene/ActionScene.h"
 #include "scene/ShowLevelScene.h"
@@ -22,6 +24,7 @@ class GameInstall {
       gameDIContainer.addSingle<SceneManager, SceneManager>();
       gameDIContainer.addSingle<LevelManager, LevelManager>();
       gameDIContainer.addSingle<GameManager, GameManager>();
+      gameDIContainer.addSingle<ScoreManager, ScoreManager>();
 
       {
         auto tagManager = gameDIContainer.getSingle<TagManager>();
@@ -49,6 +52,13 @@ class GameInstall {
 
       {
         gameDIContainer.getSingle<GameManager>()->inject(gameDIContainer);
+      }
+
+      {
+        auto scoreManager = gameDIContainer.getSingle<ScoreManager>();
+        auto userDefault = gameDIContainer.getCocosSingle<cocos2d::UserDefault>();
+        scoreManager->inject(gameDIContainer);
+        scoreManager->setHighScore(userDefault->getIntegerForKey("highScore"));
       }
     }
 };

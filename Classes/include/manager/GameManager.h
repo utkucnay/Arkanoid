@@ -6,6 +6,7 @@
 #include "diContainer/DIContainer.h"
 #include "manager/LevelManager.h"
 #include "manager/SceneManager.h"
+#include "manager/ScoreManager.h"
 
 namespace Arkanoid {
   class Vaus;
@@ -29,6 +30,8 @@ namespace Arkanoid::Manager {
     Vaus* _vaus;
     int _vausHealth{0};
     cocos2d::Director* _director;
+    cocos2d::UserDefault* _userDefault;
+    ScoreManager* _scoreManager;
     SceneManager* _sceneManager;
     LevelManager* _levelManager;
   };

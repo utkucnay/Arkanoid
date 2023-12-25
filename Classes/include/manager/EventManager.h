@@ -6,6 +6,7 @@
 class EventHelper {
 public:
   static std::string getEnergyBallHit() { return "EnergyBallHit";}
+  static std::string getAddScore() { return "AddScore";}
 };
 
 #endif

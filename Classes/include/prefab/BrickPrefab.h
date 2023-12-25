@@ -23,6 +23,7 @@ namespace Arkanoid::Prefab {
       goldBrick->setAnimAndSprite(
           *Resource::createGoldHitAnim(),
           *Resource::createGoldBlock());
+      goldBrick->setPoints(0);
       Scene::setPhysicConfig(goldBrick, getConfig().physicConfig);
       return goldBrick;
     }
@@ -55,6 +56,7 @@ namespace Arkanoid::Prefab {
       silverBrick->setAnimAndSprite(
           *Resource::createSilverHitAnim(),
           *Resource::createSilverBlock());
+      silverBrick->setPoints(50);
       Scene::setPhysicConfig(silverBrick, getConfig().physicConfig);
       return silverBrick;
     }
@@ -84,6 +86,7 @@ namespace Arkanoid::Prefab {
       auto redBrick = Brick::create();
       redBrick->inject(createDI());
       redBrick->setSprite(*Resource::createRedBlock());
+      redBrick->setPoints(100);
       Scene::setPhysicConfig(redBrick, getConfig().physicConfig);
       return redBrick;
     }
@@ -110,6 +113,7 @@ namespace Arkanoid::Prefab {
       auto blueBrick = Brick::create();
       blueBrick->inject(createDI());
       blueBrick->setSprite(*Resource::createBlueBlock());
+      blueBrick->setPoints(110);
       Scene::setPhysicConfig(blueBrick, getConfig().physicConfig);
       return blueBrick;
     }
@@ -136,6 +140,7 @@ namespace Arkanoid::Prefab {
       auto greenBrick = Brick::create();
       greenBrick->inject(createDI());
       greenBrick->setSprite(*Resource::createGreenBlock());
+      greenBrick->setPoints(90);
       Scene::setPhysicConfig(greenBrick, getConfig().physicConfig);
       return greenBrick;
     }
@@ -162,6 +167,7 @@ namespace Arkanoid::Prefab {
       auto orangeBrick = Brick::create();
       orangeBrick->inject(createDI());
       orangeBrick->setSprite(*Resource::createOrangeBlock());
+      orangeBrick->setPoints(60);
       Scene::setPhysicConfig(orangeBrick, getConfig().physicConfig);
       return orangeBrick;
     }
@@ -188,6 +194,7 @@ namespace Arkanoid::Prefab {
       auto violetBrick = Brick::create();
       violetBrick->inject(createDI());
       violetBrick->setSprite(*Resource::createVioletBlock());
+      violetBrick->setPoints(120);
       Scene::setPhysicConfig(violetBrick, getConfig().physicConfig);
       return violetBrick;
     }
@@ -214,6 +221,7 @@ namespace Arkanoid::Prefab {
       auto whiteBrick = Brick::create();
       whiteBrick->inject(createDI());
       whiteBrick->setSprite(*Resource::createWhiteBlock());
+      whiteBrick->setPoints(50);
       Scene::setPhysicConfig(whiteBrick, getConfig().physicConfig);
       return whiteBrick;
     }
@@ -240,6 +248,7 @@ namespace Arkanoid::Prefab {
       auto yellowBrick = Brick::create();
       yellowBrick->inject(createDI());
       yellowBrick->setSprite(*Resource::createYellowBlock());
+      yellowBrick->setPoints(50);
       Scene::setPhysicConfig(yellowBrick, getConfig().physicConfig);
       return yellowBrick;
     }
@@ -266,6 +275,7 @@ namespace Arkanoid::Prefab {
       auto cyanBrick = Brick::create();
       cyanBrick->inject(createDI());
       cyanBrick->setSprite(*Resource::createCyanBlock());
+      cyanBrick->setPoints(70);
       Scene::setPhysicConfig(cyanBrick, getConfig().physicConfig);
       return cyanBrick;
     }

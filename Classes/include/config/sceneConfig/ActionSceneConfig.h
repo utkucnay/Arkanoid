@@ -41,6 +41,7 @@ struct ActionSceneConfig {
   LabelConfig highScoreLabel;
   LabelConfig levelLabel;
   LabelConfig scoreLabel;
+  LabelConfig score;
 };
 
 
@@ -174,6 +175,10 @@ static std::shared_ptr<ActionSceneConfig> getActionSceneConfig() {
   cfg->scoreLabel.text = "Score";
   cfg->scoreLabel.size = 10;
   cfg->scoreLabel.fontFile = Arkanoid::Resource::getTTFFontFileName();
+
+  cfg->score.nodeConfig.positionZ = (int)Priorty::UI;
+  cfg->score.nodeConfig.pos = cocos2d::Vec2(8, 338);
+  cfg->score.nodeConfig.anchorPoint = cocos2d::Vec2(0, 1);
 
   return cfg;
 }

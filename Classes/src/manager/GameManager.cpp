@@ -13,6 +13,9 @@ Arkanoid::Manager::GameManager::inject(
   _sceneManager = diContainer.getSingle<SceneManager>();
   _levelManager = diContainer.getSingle<LevelManager>();
   _director = diContainer.getCocosSingle<cocos2d::Director>();
+  if(diContainer.hasSingle<Manager::ScoreManager>())
+    _scoreManager = diContainer.getSingle<Manager::ScoreManager>();
+  _userDefault = diContainer.getCocosSingle<cocos2d::UserDefault>();
 }
 
 void
@@ -24,6 +27,7 @@ Arkanoid::Manager::GameManager::startSession() {
         }
       );
 
+  _scoreManager->resetScore();
   auto* seq = cocos2d::Sequence::create(delay, changeScene, NULL);
   cocos2d::Director::getInstance()->getRunningScene()->runAction(seq);
 }
@@ -32,6 +36,7 @@ void
 Arkanoid::Manager::GameManager::endSession() {
   _levelManager->resetLevel();
   _sceneManager->changeScene<TitleScene>();
+  _userDefault->setIntegerForKey("HighScore", _scoreManager->getHighScore());
 }
 
 void

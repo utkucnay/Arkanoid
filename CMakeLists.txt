@@ -80,6 +80,8 @@ list(APPEND GAME_SOURCE
      Classes/src/actor/Brick.cpp
      Classes/src/actor/AnimatedBrick.cpp
 
+     Classes/src/label/ScoreLabel.cpp
+
      Classes/src/component/MouseInputHandleComponent.cpp
      Classes/src/component/MobileInputHandleComponent.cpp
      Classes/src/component/MoveComponent.cpp

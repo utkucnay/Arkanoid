@@ -1,6 +1,4 @@
 #include "actor/Brick.h"
-#include "2d/CCActionInterval.h"
-#include "CCEventListenerCustom.h"
 #include "manager/EventManager.h"
 
 bool
@@ -16,7 +14,7 @@ void
 Arkanoid::Brick::hit(const cocos2d::Node& node) {
   _healthComponent->decraseHealth(1);
   if(_healthComponent->isDeath()) {
-      this->removeFromParentAndCleanup(true);
+    onDestroy();
   }
 }
 
@@ -51,7 +49,16 @@ Arkanoid::Brick::energyBallHitSomething(
       cocos2d::ScaleTo::create(.1, .75, .75),
       cocos2d::ScaleTo::create(.1, 1, 1),
       NULL);
+
   seq->setTag(22);
 
   runAction(seq);
+}
+
+void
+Arkanoid::Brick::onDestroy() {
+  this->removeFromParentAndCleanup(true);
+  cocos2d::EventCustom event(EventHelper::getAddScore());
+  event.setUserData(&_points);
+  _eventDispatcher->dispatchEvent(&event);
 }
